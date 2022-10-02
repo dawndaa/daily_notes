@@ -15,38 +15,8 @@ class QueryResult;
 class TextQuery {
 public:
     using line_no = vector<string>::size_type; // 定义别名
-    TextQuery(ifstream&);
-    QueryResult query(const string& ) const; // 查询函数
 
-private:
-    shared_ptr<vector<string>> file; // 输入文件的智能指针
-    map<string, shared_ptr<set<line_no>>> wm; // 以单词名字为key value是包含单词出现行号的set的智能指针
-};
-
-class QueryResult {
-friend ostream& print(ostream&, const QueryResult&);
-public:
-    QueryResult(const string& s, shared_ptr<set<TextQuery::line_no>> p, shared_ptr<vector<string>> f):
-        sought(s), lines(p), file(f) { }
-
-private:
-    string sought;
-    shared_ptr<vector<TextQuery::line_no>> lines;
-    shared_ptr<vector<string>> file;
-};
-
-ostream& print(ostream& os, const QueryResult& qr) {
-    // 如果找到单词 打印出现次数和所有位置
-    os << qr.sought << "出现了" << qr.lines->size() << " " << 
-    qr.lines->size() << (qr.lines->size() > 1 ? "times" : "time")  << endl;
-    // 打印单词出现的每一行
-    for (auto num: *qr.lines) 
-        os << "\t(line" << num + 1 << ") " << *(qr.file->begin() + num) << endl;
-
-    return os;
-}
-
-TextQuery::TextQuery(ifstream& is): file(new vector<string>) {
+    TextQuery(ifstream& is): file(new vector<string>) {
     string text;
     while (getline(is, text)) { // 读取文件流中的每一行
         file->push_back(text);  // 将其保存在文件中
@@ -64,7 +34,7 @@ TextQuery::TextQuery(ifstream& is): file(new vector<string>) {
     }
 }
 
-QueryResult TextQuery::query(const string& sought) const {
+    QueryResult query(const string& sought) const {
     // 如果未找到sought 返回一个指向此set的指针
     static shared_ptr<set<line_no>> nodata(new set<line_no>);
     auto loc = wm.find(sought); // 查找而不插入
@@ -73,5 +43,34 @@ QueryResult TextQuery::query(const string& sought) const {
     else 
         return QueryResult(sought, loc->second, file);
 }
+
+private:
+    shared_ptr<vector<string>> file; // 输入文件的智能指针
+    map<string, shared_ptr<set<line_no>>> wm; // 以单词名字为key value是包含单词出现行号的set的智能指针
+};
+
+class QueryResult {
+friend ostream& print(ostream& , const QueryResult&) { }
+
+public:
+    QueryResult(const string& s, shared_ptr<set<TextQuery::line_no>> p, shared_ptr<vector<string>> f):
+        sought(s), lines(p), file(f) { }
+
+private:
+    string sought;
+    shared_ptr<set<TextQuery::line_no>> lines;
+    shared_ptr<vector<string>> file;
+};
+
+ostream& print(ostream& os, const QueryResult& qr) {
+        // 如果找到单词 打印出现次数和所有位置
+        os << qr.sought << "出现了" << qr.lines->size() << " " << 
+        qr.lines->size() << (qr.lines->size() > 1 ? "times" : "time")  << endl;
+        // 打印单词出现的每一行
+        for (auto num: *qr.lines) 
+            os << "\t(line" << num + 1 << ") " << *(qr.file->begin() + num) << endl;
+
+        return os;
+    }
 
 # endif

@@ -4,7 +4,7 @@ using namespace std;
 
 void runQueries(std::ifstream &infile)
 {
-    TextQuery tq(infile);
+    TextQuery tq = TextQuery(infile);
     while (true) {
         std::cout << "enter word to look for, or q to quit: ";
         string s;
@@ -17,4 +17,4 @@ int main()
 {
     std::ifstream file("../data/DataFile.txt");
     runQueries(file);
-}
+} 
