@@ -1,37 +1,29 @@
 # include <iostream>
+# include <queue>
 using namespace std;
 
-class Hanoi {
+class TreeNode {
 public:
-	void HanoiTowers(int n, char a, char b, char c);
-	void Move(int n, char s, char t);
+	TreeNode* left;
+	TreeNode* right;
+	int val;
+
+	TreeNode(int v): val(v), left(nullptr), right(nullptr) { };
 };
 
-void Hanoi::HanoiTowers(int n, char a, char b, char c) {
-	if (n == 1) {
-		Move(1, a, b);
-	}
-	else {
-		HanoiTowers(n - 1, a, c, b);
-		Move(n, a, b);
-		HanoiTowers(n - 1, c, b, c);
-	}
-
-	return ;
-}
-
-void Hanoi::Move(int n, char s, char t) {
-	cout << "move the " << n << "th dish from " << s << " to " << t << endl;
-	return ;
-}
-
 int main() {
-	Hanoi h;
-	int n;
-	cout << "Please enter the number of dishes: ";
-	cin >> n;
-	h.HanoiTowers(n, 'A', 'B', 'C');
-	
+	TreeNode* root = new TreeNode(0), *cur = root;
+	for (int i = 0; i < 100; ++i) {
+		TreeNode* tmp = new TreeNode(i + 1);
+		cur->left = tmp;
+		cur = cur->left;
+	}
+
+	while (root) {
+		cout << root->val << endl;
+		root = root->left;
+	}
+
 	system("pause");
 	return 0;
 }
