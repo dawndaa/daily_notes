@@ -1,0 +1,99 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/05/CPU.hdl
+
+
+/**
+ * The Hack CPU (Central Processing unit), consisting of an ALU,
+ * two registers named A and D, and a program counter named PC.
+ * CPU 由ALU 寄存器A 寄存器D 程序计数器PC组成
+ * The CPU is designed to fetch and execute instructions written in 
+ * the Hack machine language. CPU是用来载入和运行Hack机器语言编写的指令的
+ * In particular, functions as follows: 功能如下
+ * Executes the inputted instruction according to the Hack machine 
+ * language specification. 运行输入的指令
+ * The D and A in the language specification
+ * refer to CPU-resident registers D和A指代的是CPU中的寄存器
+ * while M refers to the external  M指代的是由寄存器A定位的内存
+ * memory location addressed by A, i.e. to Memory[A]. 
+ * The inM input  inM输入的是Memory[A]的值
+ * holds the value of this location. 
+ * If the current instruction needs  如果要向M中写入值，这个值被放在outM中
+ * to write a value to M, the value is placed in outM, the address 
+ * of the target location is placed in the addressM output, and the 
+ * writeM control bit is asserted.   目标地址放在addressM输出中，并且writeM = 1
+ * (When writeM==0, any value may 
+ * appear in outM). The outM and writeM outputs are combinational:  
+ * they are affected instantaneously by the execution of the current 
+ * instruction. The addressM and pc outputs are clocked: although they 
+ * are affected by the execution of the current instruction, they commit 
+ * to their new values only in the next time step.
+ * If reset==1 then the   reset为1的话 下次PC就被设置为0
+ * CPU jumps to address 0 (i.e. pc is set to 0 in next time step) rather 
+ * than to the address resulting from executing the current instruction. 
+ */
+
+CHIP CPU {
+
+    IN  inM[16],         // M value input  (M = contents of RAM[A])
+        instruction[16], // Instruction for execution
+        reset;           // Signals whether to re-start the current
+                         // program (reset==1) or continue executing
+                         // the current program (reset==0).
+
+    OUT outM[16],        // M value output
+        writeM,          // Write to M? 　
+        addressM[15],    // Address in data memory (of M)
+        pc[15];          // address of next instruction
+
+    PARTS:
+    // 首先判断是A指令还是C指令
+    Not(in = instruction[15], out = isA); // isA = 1则为A指令
+    Not(in = isA, out = isC); // isC = 1则为C指令
+
+    // 是A指令则将instruction载入A中  
+    // 是C指令并且instruction[5] = 1 就将outALU载入A中
+    And(a = isC, b = instruction[5], out = isLoadA);
+    Mux16(a = instruction, b = outALU, sel = isLoadA, out = inA);
+    Or(a = isA, b = instruction[5], out = loadA); 
+    ARegister(in = inA, load = loadA, out = outA, out[0..14] = addressM);
+
+    // 是C指令并且instruction[12] = 1 就将M载入ALU中
+    Mux16(a = outA, b = inM, sel = instruction[12], out = inAM);
+
+    // 是C指令并且instruction[3] = 1 就将writeM写为1
+    And(a = isC, b = instruction[3], out = writeM);
+
+    // 是C指令并且instruction[4] = 1 就将outALU载入D中
+    And(a = isC, b = instruction[4], out = isLoadD);
+    DRegister(in = outALU, load = isLoadD, out = inD);
+
+    And(a = isC, b = instruction[11], out = zx);
+    And(a = isC, b = instruction[10], out = nx);
+    And(a = isC, b = instruction[9], out = zy);
+    And(a = isC, b = instruction[8], out = ny);
+    And(a = isC, b = instruction[7], out = f);
+    And(a = isC, b = instruction[6], out = no);
+
+    ALU(x = inD, y = inAM, zx = zx, nx = nx, zy = zy, 
+    ny = ny, f = f, no = no, out = outM, out = outALU, zr = iseq, ng = islt);
+
+    // 根据zr和ng求出 输出是否大于零
+    Or(a = iseq, b = islt, out = notgt);
+    Not(in = notgt, out = isgt);
+
+    // 判断输出是否满足跳转的条件
+    And(a = instruction[0], b = isC, out = gt);
+    And(a = instruction[1], b = isC, out = eq);
+    And(a = instruction[2], b = isC, out = lt);
+    And(a = gt, b = isgt, out = jgt);
+    And(a = eq, b = iseq, out = jeq);
+    And(a = lt, b = islt, out = jlt);
+
+    // 三个结果或  得出是否跳转
+    Or(a = jgt, b = jeq, out = or1);
+    Or(a = or1, b = jlt, out = jmp);
+
+    PC(in = outA, load = jmp, inc = true, reset = reset, out[0..14] = pc);
+}   

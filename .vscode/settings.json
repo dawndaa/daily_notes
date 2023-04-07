@@ -1,0 +1,22 @@
+{
+    "files.associations": {
+        "iosfwd": "cpp",
+        "ostream": "cpp",
+        "*.tcc": "c",
+        "chrono": "c",
+        "ctime": "c",
+        "future": "c",
+        "iomanip": "c",
+        "limits": "c",
+        "numeric": "c",
+        "ranges": "c",
+        "ratio": "c",
+        "shared_mutex": "c",
+        "streambuf": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "cachelab.h": "c",
+        "algorithm": "cpp"
+    }
+}

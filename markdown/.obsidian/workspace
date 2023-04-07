@@ -1,0 +1,137 @@
+{
+  "main": {
+    "id": "b189d7b04867c4b1",
+    "type": "split",
+    "children": [
+      {
+        "id": "eba8492f125eec29",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "basic_knowledge.md",
+            "mode": "source",
+            "source": false
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "a71e8f3c4e854245",
+    "type": "split",
+    "children": [
+      {
+        "id": "8d0b950bf2868540",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8ab8bf1a01dec6b5",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "8f21832176e3d0f6",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "ead7693385d1653a",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "043497015a88224e",
+    "type": "split",
+    "children": [
+      {
+        "id": "dbef605862abf1f6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b767ef8f985554b6",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "basic_knowledge.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "2948addee04f8b31",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "basic_knowledge.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "eb3f2654228db7aa",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "378144e2253317df",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "basic_knowledge.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "eba8492f125eec29",
+  "lastOpenFiles": [
+    "图论.md",
+    "数论.md",
+    "memset.md"
+  ]
+}
